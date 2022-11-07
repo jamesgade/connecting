@@ -15,7 +15,9 @@ const Input = () => {
     const { currentUser } = useContext(AuthContext)
     const { data } = useContext(ChatContext)
 
-    const handleSend = async () => {
+    const handleSend = async (e) => {
+
+        e.preventDefault();
 
         if (img) {
 
@@ -59,14 +61,14 @@ const Input = () => {
             [data.chatId + ".lastMessage"]: {
                 text
             },
-            [data.chatId + ".data"] : serverTimestamp()
+            [data.chatId + ".data"]: serverTimestamp()
         })
 
         await updateDoc(doc(db, "userChats", data.user.uid), {
             [data.chatId + ".lastMessage"]: {
                 text
             },
-            [data.chatId + ".date"] : serverTimestamp()
+            [data.chatId + ".date"]: serverTimestamp()
         })
 
         setText("")
@@ -74,7 +76,7 @@ const Input = () => {
     }
 
     return (
-        <div className="input">
+        <form className="input" onSubmit={handleSend}>
             <input type="text" placeholder="Type your message" value={text} onChange={(e) => setText(e.target.value)} />
             <div className="send">
                 <img src={add} alt="add" />
@@ -82,9 +84,9 @@ const Input = () => {
                 <label htmlFor="file">
                     <img src={attach} alt="attachment" />
                 </label>
-                <button onClick={handleSend}>Send</button>
+                <button type="submit">Send</button>
             </div>
-        </div>
+        </form>
     )
 }
 
